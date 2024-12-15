@@ -5,7 +5,7 @@ process.env.TABLE_NAME = 'test-table';
 import { mockClient } from "aws-sdk-client-mock";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { DeleteCommand } from "@aws-sdk/lib-dynamodb";
-import { handler } from "../lambdas/delete-one";
+import { handler } from "../delete-one";
 
 const dbMock = mockClient(DynamoDBDocument);
 

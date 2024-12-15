@@ -5,7 +5,7 @@ process.env.TABLE_NAME = 'test-table';
 import { mockClient } from "aws-sdk-client-mock";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
-import { handler } from "../lambdas/create";
+import { handler } from "../create";
 import { v4 as uuidv4 } from 'uuid';
 
 // Mock uuid to have consistent test values

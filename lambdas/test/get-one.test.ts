@@ -1,7 +1,7 @@
 import { mockClient } from "aws-sdk-client-mock";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
-import { handler } from "../lambdas/get-one";
+import { handler } from "../get-one";
 
 const dbMock = mockClient(DynamoDBDocument);
 

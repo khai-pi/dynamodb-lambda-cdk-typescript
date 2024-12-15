@@ -3,7 +3,7 @@ process.env.TABLE_NAME = 'test-table';
 import { mockClient } from "aws-sdk-client-mock";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { ScanCommand } from "@aws-sdk/lib-dynamodb";
-import { handler } from "../lambdas/get-all";
+import { handler } from "../get-all";
 
 const dbMock = mockClient(DynamoDBDocument);
 

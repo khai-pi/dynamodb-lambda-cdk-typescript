@@ -30,6 +30,12 @@ export class DynamodbLambdaCdkTypescriptStack extends Stack {
           'aws-sdk',
           '@aws-sdk/*',
           '@smithy/*',
+          // Test-related modules
+          'jest',
+          '@types/jest',
+          'aws-sdk-client-mock',
+          'ts-jest',
+          '@shelf/jest-dynamodb'
         ],
       },
       depsLockFilePath: join(__dirname, '..', 'lambdas', 'package-lock.json'),
