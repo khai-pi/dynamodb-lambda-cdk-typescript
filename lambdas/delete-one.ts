@@ -8,10 +8,11 @@ const db = DynamoDBDocument.from(new DynamoDB());
 
 export const handler = async (event: any = {}): Promise<any> => {
 
-  const requestedItemId = event.pathParameters.id;
-  if (!requestedItemId) {
-    return { statusCode: 400, body: `Error: You are missing the path parameter id` };
+  if (!event.pathParameters || !event.pathParameters.id) {
+    return { statusCode: 400, body: 'Error: You are missing the path parameter id' };
   }
+
+  const requestedItemId = event.pathParameters.id;
 
   const params = {
     TableName: TABLE_NAME,
