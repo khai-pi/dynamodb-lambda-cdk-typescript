@@ -7,9 +7,11 @@ const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 const db = DynamoDBDocument.from(new DynamoDB());
 
 export const handler = async (event: any = {}): Promise<any> => {
-
   if (!event.pathParameters || !event.pathParameters.id) {
-    return { statusCode: 400, body: 'Error: You are missing the path parameter id' };
+    return {
+      statusCode: 400,
+      body: 'Error: You are missing the path parameter id',
+    };
   }
 
   const requestedItemId = event.pathParameters.id;
@@ -17,8 +19,8 @@ export const handler = async (event: any = {}): Promise<any> => {
   const params = {
     TableName: TABLE_NAME,
     Key: {
-      [PRIMARY_KEY]: requestedItemId
-    }
+      [PRIMARY_KEY]: requestedItemId,
+    },
   };
 
   try {

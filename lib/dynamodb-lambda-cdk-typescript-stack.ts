@@ -1,9 +1,18 @@
-import { IResource, LambdaIntegration, MockIntegration, PassthroughBehavior, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import {
+  IResource,
+  LambdaIntegration,
+  MockIntegration,
+  PassthroughBehavior,
+  RestApi,
+} from 'aws-cdk-lib/aws-apigateway';
 import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { App, Stack, RemovalPolicy, StackProps } from 'aws-cdk-lib';
-import { NodejsFunction, NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { join } from 'path'
+import {
+  NodejsFunction,
+  NodejsFunctionProps,
+} from 'aws-cdk-lib/aws-lambda-nodejs';
+import { join } from 'path';
 
 export class DynamodbLambdaCdkTypescriptStack extends Stack {
   constructor(app: App, id: string, props?: StackProps) {
@@ -12,7 +21,7 @@ export class DynamodbLambdaCdkTypescriptStack extends Stack {
     const dynamoTable = new Table(this, 'items', {
       partitionKey: {
         name: 'itemId',
-        type: AttributeType.STRING
+        type: AttributeType.STRING,
       },
       tableName: 'items',
 
@@ -35,7 +44,7 @@ export class DynamodbLambdaCdkTypescriptStack extends Stack {
           '@types/jest',
           'aws-sdk-client-mock',
           'ts-jest',
-          '@shelf/jest-dynamodb'
+          '@shelf/jest-dynamodb',
         ],
       },
       depsLockFilePath: join(__dirname, '..', 'lambdas', 'package-lock.json'),
@@ -44,7 +53,7 @@ export class DynamodbLambdaCdkTypescriptStack extends Stack {
         TABLE_NAME: dynamoTable.tableName,
       },
       runtime: Runtime.NODEJS_20_X,
-    }
+    };
 
     // Create a Lambda function for each of the CRUD operations
     const getOneLambda = new NodejsFunction(this, 'getOneItemFunction', {
@@ -82,10 +91,9 @@ export class DynamodbLambdaCdkTypescriptStack extends Stack {
     const updateOneIntegration = new LambdaIntegration(updateOneLambda);
     const deleteOneIntegration = new LambdaIntegration(deleteOneLambda);
 
-
     // Create an API Gateway resource for each of the CRUD operations
     const api = new RestApi(this, 'itemsApi', {
-      restApiName: 'Items Service'
+      restApiName: 'Items Service',
       // In case you want to manage binary types, uncomment the following
       // binaryMediaTypes: ["*/*"],
     });
@@ -104,32 +112,43 @@ export class DynamodbLambdaCdkTypescriptStack extends Stack {
 }
 
 export function addCorsOptions(apiResource: IResource) {
-  apiResource.addMethod('OPTIONS', new MockIntegration({
-    // In case you want to use binary media types, uncomment the following line
-    // contentHandling: ContentHandling.CONVERT_TO_TEXT,
-    integrationResponses: [{
-      statusCode: '200',
-      responseParameters: {
-        'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-        'method.response.header.Access-Control-Allow-Origin': "'*'",
-        'method.response.header.Access-Control-Allow-Credentials': "'false'",
-        'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE'",
+  apiResource.addMethod(
+    'OPTIONS',
+    new MockIntegration({
+      // In case you want to use binary media types, uncomment the following line
+      // contentHandling: ContentHandling.CONVERT_TO_TEXT,
+      integrationResponses: [
+        {
+          statusCode: '200',
+          responseParameters: {
+            'method.response.header.Access-Control-Allow-Headers':
+              "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+            'method.response.header.Access-Control-Allow-Origin': "'*'",
+            'method.response.header.Access-Control-Allow-Credentials':
+              "'false'",
+            'method.response.header.Access-Control-Allow-Methods':
+              "'OPTIONS,GET,PUT,POST,DELETE'",
+          },
+        },
+      ],
+      // In case you want to use binary media types, comment out the following line
+      passthroughBehavior: PassthroughBehavior.NEVER,
+      requestTemplates: {
+        'application/json': '{"statusCode": 200}',
       },
-    }],
-    // In case you want to use binary media types, comment out the following line
-    passthroughBehavior: PassthroughBehavior.NEVER,
-    requestTemplates: {
-      "application/json": "{\"statusCode\": 200}"
+    }),
+    {
+      methodResponses: [
+        {
+          statusCode: '200',
+          responseParameters: {
+            'method.response.header.Access-Control-Allow-Headers': true,
+            'method.response.header.Access-Control-Allow-Methods': true,
+            'method.response.header.Access-Control-Allow-Credentials': true,
+            'method.response.header.Access-Control-Allow-Origin': true,
+          },
+        },
+      ],
     },
-  }), {
-    methodResponses: [{
-      statusCode: '200',
-      responseParameters: {
-        'method.response.header.Access-Control-Allow-Headers': true,
-        'method.response.header.Access-Control-Allow-Methods': true,
-        'method.response.header.Access-Control-Allow-Credentials': true,
-        'method.response.header.Access-Control-Allow-Origin': true,
-      },
-    }]
-  })
+  );
 }

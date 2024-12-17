@@ -35,15 +35,15 @@ describe('DynamodbLambdaCdkTypescriptStack Test', () => {
       KeySchema: [
         {
           AttributeName: 'itemId',
-          KeyType: 'HASH'
-        }
+          KeyType: 'HASH',
+        },
       ],
       AttributeDefinitions: [
         {
           AttributeName: 'itemId',
-          AttributeType: 'S'
-        }
-      ]
+          AttributeType: 'S',
+        },
+      ],
     });
   });
 
@@ -57,32 +57,32 @@ describe('DynamodbLambdaCdkTypescriptStack Test', () => {
       Environment: {
         Variables: {
           PRIMARY_KEY: 'itemId',
-          TABLE_NAME: Match.anyValue() // Allow any value since it's a CloudFormation reference
-        }
-      }
+          TABLE_NAME: Match.anyValue(), // Allow any value since it's a CloudFormation reference
+        },
+      },
     });
   });
 
   test('API Gateway Created', () => {
     // Test API Gateway REST API is created
     template.hasResourceProperties('AWS::ApiGateway::RestApi', {
-      Name: 'Items Service'
+      Name: 'Items Service',
     });
 
     // Test API Gateway Methods
     template.hasResourceProperties('AWS::ApiGateway::Method', {
       HttpMethod: 'GET',
-      AuthorizationType: 'NONE'
+      AuthorizationType: 'NONE',
     });
 
     template.hasResourceProperties('AWS::ApiGateway::Method', {
       HttpMethod: 'POST',
-      AuthorizationType: 'NONE'
+      AuthorizationType: 'NONE',
     });
 
     template.hasResourceProperties('AWS::ApiGateway::Method', {
       HttpMethod: 'OPTIONS',
-      AuthorizationType: 'NONE'
+      AuthorizationType: 'NONE',
     });
   });
 
@@ -102,12 +102,12 @@ describe('DynamodbLambdaCdkTypescriptStack Test', () => {
               'dynamodb:BatchWriteItem',
               'dynamodb:PutItem',
               'dynamodb:UpdateItem',
-              'dynamodb:DeleteItem'
+              'dynamodb:DeleteItem',
             ]),
-            Resource: Match.anyValue()
-          })
-        ])
-      }
+            Resource: Match.anyValue(),
+          }),
+        ]),
+      },
     });
   });
 });
