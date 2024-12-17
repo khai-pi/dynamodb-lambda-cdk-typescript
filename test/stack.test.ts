@@ -1,4 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Template, Match } from 'aws-cdk-lib/assertions';
 import { DynamodbLambdaCdkTypescriptStack } from '../lib/dynamodb-lambda-cdk-typescript-stack';
 
@@ -7,7 +8,6 @@ import { DynamodbLambdaCdkTypescriptStack } from '../lib/dynamodb-lambda-cdk-typ
 // Prevent esbuild bundling error in CI
 jest.mock('aws-cdk-lib/aws-lambda-nodejs', () => ({
   NodejsFunction: jest.fn().mockImplementation((scope, id, props) => {
-    const lambda = require('aws-cdk-lib/aws-lambda');
     return new lambda.Function(scope, id, {
       ...props,
       runtime: props.runtime,
