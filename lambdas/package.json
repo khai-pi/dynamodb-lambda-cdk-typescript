@@ -2,7 +2,7 @@
   "name": "lambda-functions",
   "version": "0.1.0",
   "scripts": {
-    "test": "jest",
+    "test": "jest --config jest.config.cjs",
     "test:watch": "jest --watch"
   },
   "dependencies": {
