@@ -2,6 +2,22 @@ import * as cdk from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
 import { DynamodbLambdaCdkTypescriptStack } from '../lib/dynamodb-lambda-cdk-typescript-stack';
 
+// Mock NodejsFunction to avoid actual bundling during tests
+// Allow testing of infrastructure properties
+// Prevent esbuild bundling error in CI
+jest.mock('aws-cdk-lib/aws-lambda-nodejs', () => ({
+  NodejsFunction: jest.fn().mockImplementation((scope, id, props) => {
+    const lambda = require('aws-cdk-lib/aws-lambda');
+    return new lambda.Function(scope, id, {
+      ...props,
+      runtime: props.runtime,
+      handler: 'index.handler',
+      code: lambda.Code.fromInline('exports.handler = function() { }'),
+    });
+  }),
+  NodejsFunctionProps: jest.fn(),
+}));
+
 describe('DynamodbLambdaCdkTypescriptStack Test', () => {
   let app: cdk.App;
   let stack: DynamodbLambdaCdkTypescriptStack;
