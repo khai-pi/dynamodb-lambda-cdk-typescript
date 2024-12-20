@@ -17,3 +17,5 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 - Seperate testing for infrastructures and lambdas functions
 - Seperate package.json for optimizing bundling process
+- Add lint and prettier
+- Github action for CI
